@@ -4,7 +4,6 @@ workflow TransferNanoporeAssemblies {
 
     input {
         Array[File] barcode_summary
-        Array[File] merged_fastq
         Array[File] filtered_fastq
         Array[File] sorted_bam
         Array[File] flagstat_out
@@ -20,7 +19,6 @@ workflow TransferNanoporeAssemblies {
     call transfer_outputs {
         input:
             barcode_summary = barcode_summary,
-            merged_fastq = merged_fastq,
             filtered_fastq = filtered_fastq,
             sorted_bam = sorted_bam,
             flagstat_out = flagstat_out,
@@ -41,7 +39,6 @@ workflow TransferNanoporeAssemblies {
 task transfer_outputs {
     input {
         Array[File] barcode_summary
-        Array[File] merged_fastq
         Array[File] filtered_fastq
         Array[File] sorted_bam
         Array[File] flagstat_out
@@ -59,7 +56,6 @@ task transfer_outputs {
     command <<<
         
         gsutil -m cp ~{sep=' ' barcode_summary} ~{outdir}/demux/
-        gsutil -m cp ~{sep=' ' merged_fastq} ~{outdir}/demux/
         gsutil -m cp ~{sep=' ' filtered_fastq} ~{outdir}/filtered_fastq/
         gsutil -m cp ~{sep=' ' sorted_bam} ~{outdir}/alignments/
         gsutil -m cp ~{sep=' ' flagstat_out} ~{outdir}/bam_stats/
@@ -80,7 +76,7 @@ task transfer_outputs {
 
     runtime {
         docker: "theiagen/utility:1.0"
-        memory: "1 GB"
+        memory: "4 GB"
         cpu: 1
         disks: "local-disk 10 SSD"
     }
