@@ -3,7 +3,6 @@ version 1.0
 workflow TransferNanoporeAssemblies {
 
     input {
-        Array[File] barcode_summary
         Array[File] filtered_fastq
         Array[File] sorted_bam
         Array[File] flagstat_out
@@ -18,7 +17,6 @@ workflow TransferNanoporeAssemblies {
 
     call transfer_outputs {
         input:
-            barcode_summary = barcode_summary,
             filtered_fastq = filtered_fastq,
             sorted_bam = sorted_bam,
             flagstat_out = flagstat_out,
@@ -38,7 +36,6 @@ workflow TransferNanoporeAssemblies {
 
 task transfer_outputs {
     input {
-        Array[File] barcode_summary
         Array[File] filtered_fastq
         Array[File] sorted_bam
         Array[File] flagstat_out
@@ -55,7 +52,6 @@ task transfer_outputs {
 
     command <<<
         
-        gsutil -m cp ~{sep=' ' barcode_summary} ~{outdir}/demux/
         gsutil -m cp ~{sep=' ' filtered_fastq} ~{outdir}/filtered_fastq/
         gsutil -m cp ~{sep=' ' sorted_bam} ~{outdir}/alignments/
         gsutil -m cp ~{sep=' ' flagstat_out} ~{outdir}/bam_stats/
