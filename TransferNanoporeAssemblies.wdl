@@ -4,13 +4,13 @@ workflow TransferNanoporeAssemblies {
 
     input {
         Array[File] filtered_fastq
-        Array[File] sorted_bam
+        Array[File] trim_sorted_bam
         Array[File] flagstat_out
         Array[File] samstats_out
         Array[File] covhist_out
         Array[File] cov_out
         Array[File] variants
-        Array[File] consensus
+        Array[File] scaffold_consensus
         Array[File] renamed_consensus
         String out_dir
     }
@@ -18,13 +18,13 @@ workflow TransferNanoporeAssemblies {
     call transfer_outputs {
         input:
             filtered_fastq = filtered_fastq,
-            sorted_bam = sorted_bam,
+            trim_sorted_bam = trim_sorted_bam,
             flagstat_out = flagstat_out,
             samstats_out = samstats_out,
             covhist_out = covhist_out,
             cov_out = cov_out,
             variants = variants,
-            consensus = consensus,
+            scaffold_consensus = scaffold_consensus,
             renamed_consensus = renamed_consensus,
             out_dir = out_dir
     }
@@ -37,13 +37,13 @@ workflow TransferNanoporeAssemblies {
 task transfer_outputs {
     input {
         Array[File] filtered_fastq
-        Array[File] sorted_bam
+        Array[File] trim_sorted_bam
         Array[File] flagstat_out
         Array[File] samstats_out
         Array[File] covhist_out
         Array[File] cov_out
         Array[File] variants
-        Array[File] consensus
+        Array[File] scaffold_consensus
         Array[File] renamed_consensus
         String out_dir
     }
@@ -53,12 +53,12 @@ task transfer_outputs {
     command <<<
         
         gsutil -m cp ~{sep=' ' filtered_fastq} ~{outdir}/filtered_fastq/
-        gsutil -m cp ~{sep=' ' sorted_bam} ~{outdir}/alignments/
+        gsutil -m cp ~{sep=' ' trim_sorted_bam} ~{outdir}/alignments/
         gsutil -m cp ~{sep=' ' flagstat_out} ~{outdir}/bam_stats/
         gsutil -m cp ~{sep=' ' samstats_out} ~{outdir}/bam_stats/
         gsutil -m cp ~{sep=' ' covhist_out} ~{outdir}/bam_stats/
         gsutil -m cp ~{sep=' ' cov_out} ~{outdir}/bam_stats/
-        gsutil -m cp ~{sep=' ' consensus} ~{outdir}/assemblies/
+        gsutil -m cp ~{sep=' ' scaffold_consensus} ~{outdir}/assemblies/
         gsutil -m cp ~{sep=' ' variants} ~{outdir}/variants/
         gsutil -m cp ~{sep=' ' renamed_consensus} ~{outdir}/assemblies/
         
